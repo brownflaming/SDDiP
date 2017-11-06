@@ -19,8 +19,8 @@ ifeq ("$(HOSTNAME)","tesla2.isye.gatech.edu")
 	CPLEXDIR      = /home/dzink3/my_cplex/cplex
 	CONCERTDIR    = /home/dzink3/my_cplex/concert
 else
-	CPLEXDIR      = $(HPCOPTPATH)/$(IBMPATH)/ILOG/$(CPLEX_VERSION)/cplex
-	CONCERTDIR    = $(HPCOPTPATH)/$(IBMPATH)/ILOG/$(CPLEX_VERSION)/concert
+	CPLEXDIR      = $(HPCOPTPATH)/$(IBMPATH)/ILOG/$(CPLEX_VERSION)/CPLEX_Studio/cplex
+	CONCERTDIR    = $(HPCOPTPATH)/$(IBMPATH)/ILOG/$(CPLEX_VERSION)/CPLEX_Studio/concert
 endif
 
 # --------------------------------------------------------------------

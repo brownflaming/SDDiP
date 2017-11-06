@@ -90,8 +90,11 @@ int main (int argc, char *argv[])
 		IloNumArray3 fwdSoln;
 		
 		//! start with SDDP by ignoring all integrality constraints
-		models[t].mod.add(models[t].xLP);
-		models[t].mod.add(models[t].yLP);
+		for ( int t = 0; t < fData.numStage; ++t )
+		{
+			models[t].mod.add(models[t].xLP);
+			models[t].mod.add(models[t].yLP);
+		}
 		//! Set cut generation configuration (Benders only)
 		cut.B = 1; cut.SB = 0; cut.LG = 0; cut.LEVEL = 0;; cut.I = 0;
 

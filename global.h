@@ -187,7 +187,7 @@ struct FormatData
 	//! a binary vector that specifies if uncertainty exists in [c, d1, d2, A, B, W1, W2, b] respectively
 	IloIntArray uncertaintySource;
 	//! the indices for uncertain entries of c, d1, d2, A, B, W1, W2, b
-	UncertainIndex ui;
+	// UncertainIndex ui;
 	//! scenarios for each uncertainty source
 	Scenarios scen;
 };
