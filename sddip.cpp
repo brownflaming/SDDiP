@@ -90,11 +90,9 @@ int main (int argc, char *argv[])
 		IloNumArray3 fwdSoln;
 		
 		//! start with SDDP by ignoring all integrality constraints
-		for ( int t = 0; t <= fData.breakstage; ++t )
-		{
-			models[t].mod.add(models[t].xLP);
-			models[t].mod.add(models[t].yLP);
-		}
+		models[t].mod.add(models[t].xLP);
+		models[t].mod.add(models[t].yLP);
+		//! Set cut generation configuration (Benders only)
 		cut.B = 1; cut.SB = 0; cut.LG = 0; cut.LEVEL = 0;; cut.I = 0;
 
 		double sddp_gap, simulation_gap;
@@ -145,7 +143,7 @@ int main (int argc, char *argv[])
 					for ( int k = 0; k < repeat[segment-m-1]; ++k )
 					{
 						backward(models, fData_p, first, last, fwdSoln, lb, cut);
-						getSamplePaths(sample, fData_p, sampling);
+						getSamplePaths(sample, fData_p);
 						if ( k < repeat[segment-m-1] - 1 )
 							forward(models, fData_p, first, last, sample, fwdSoln, numSelect, ub);
 					}
@@ -167,7 +165,7 @@ int main (int argc, char *argv[])
 		cout << "================================" << endl;
 		cout << "Increasing sample size." << endl;
 		fData.numFWsample = LARGE_SAMPLE;
-		getSamplePaths(sample, fData_p, sampling);
+		getSamplePaths(sample, fData_p);
 		fwdSoln = IloNumArray3(fData.dataEnv, fData.numStage);
 		forward(models, fData_p, 0, fData.numStage, sample, fwdSoln, 0, ub);
 		lb.add(lb[iteration-1]);
@@ -190,102 +188,105 @@ int main (int argc, char *argv[])
 		// *******************************
 		// Similation
 		// *******************************
-		cout << "================================" << endl;
-		cout << "Start simulation.... " << endl;
+		// cout << "================================" << endl;
+		// cout << "Start simulation.... " << endl;
 		
-		wall0 = get_wall_time();
-		// restore integrality constraints
-		for ( int t = fData.breakstage+1; t < fData.numStage; ++t )
-		{
-			for ( int i = 0; i < fData.intX; ++i )
-				models[t].mod.add(IloConversion(models[t].mod.getEnv(), models[t].x[i], ILOINT));
-			models[t].mod.add(IloConversion(models[t].mod.getEnv(), models[t].y1, ILOINT));
-		}
+		// wall0 = get_wall_time();
+		// // restore integrality constraints
+		// for ( int t = fData.breakstage + 1; t < fData.numStage; ++t )
+		// {
+		// 	models[t].xLP.end();
+		// 	models[t].yLP.end();
+		// 	// for ( int i = 0; i < fData.intX; ++i )
+		// 	// 	models[t].mod.add(IloConversion(models[t].mod.getEnv(), models[t].x[i], ILOINT));
+		// 	// models[t].mod.add(IloConversion(models[t].mod.getEnv(), models[t].y1, ILOINT));
+		// }
 
-		// forward simulation to test the performance of current approximation
-		fData.numFWsample = LARGE_SAMPLE;
-		fData.scen.b.clear();
-		fData.numScen.clear();
-		readArray<IloNumArray3> (fData.scen.b, "data/scenRHS_test.dat");
-		fwdSoln = IloNumArray3(fData.dataEnv, fData.numStage);
-		forward(models, fData_p, 0, fData.numStage, sample, fwdSoln, 0, ub);
-		simulation_gap = (ub[2][iteration+1] - lb[iteration])/ub[2][iteration+1];
-		wall1 = get_wall_time();
-		simulation_time = wall1 - wall0;
-		printf("Simulation gap: %.2f%%. \n", simulation_gap * 100);
-		printf("Total simulation time %.2f seconds.\n", simulation_time);
+		// // forward simulation to test the performance of current approximation
+		// fData.numFWsample = LARGE_SAMPLE;
+		// fData.scen.b.clear();
+		// fData.numScen.clear();
+		// readArray<IloNumArray3> (fData.scen.b, "../data/scenRHS_test.dat");
+		// fwdSoln = IloNumArray3(fData.dataEnv, fData.numStage);
+		// getSamplePaths(sample, fData_p);
+		// forward(models, fData_p, 0, fData.numStage, sample, fwdSoln, 0, ub);
+		// simulation_gap = (ub[2][iteration+1] - lb[iteration])/ub[2][iteration+1];
+		// wall1 = get_wall_time();
+		// simulation_time = wall1 - wall0;
+		// printf("Simulation gap: %.2f%%. \n", simulation_gap * 100);
+		// printf("Total simulation time %.2f seconds.\n", simulation_time);
 
-		// *******************************
-		// Output
-		// *******************************
-		ofstream outputLB ("lb.csv", ios::out | ios::app);
-		if ( outputLB.is_open() )
-		{
-			for (int i = 0; i < lb.getSize(); ++i)
-				outputLB << lb[i] << ",";
-			outputLB << endl;
-		}
-		outputLB.close();
+		// // *******************************
+		// // Output
+		// // *******************************
+		// ofstream outputLB ("lb.csv", ios::out | ios::app);
+		// if ( outputLB.is_open() )
+		// {
+		// 	for (int i = 0; i < lb.getSize(); ++i)
+		// 		outputLB << lb[i] << ",";
+		// 	outputLB << endl;
+		// }
+		// outputLB.close();
 
 
-		ofstream outputUB_l ("ub_l.csv", ios::out | ios::app);
-		if ( outputUB_l.is_open() )
-		{
-			for (int i = 0; i < ub[0].getSize() - 1; ++i)
-				outputUB_l << ub[0][i] << ",";
-			outputUB_l << endl;
-		}
-		outputUB_l.close();
+		// ofstream outputUB_l ("ub_l.csv", ios::out | ios::app);
+		// if ( outputUB_l.is_open() )
+		// {
+		// 	for (int i = 0; i < ub[0].getSize() - 1; ++i)
+		// 		outputUB_l << ub[0][i] << ",";
+		// 	outputUB_l << endl;
+		// }
+		// outputUB_l.close();
 
-		ofstream outputUB_c ("ub_c.csv", ios::out | ios::app);
-		if ( outputUB_c.is_open() )
-		{
-			for (int i = 0; i < ub[1].getSize() - 1; ++i)
-				outputUB_c << ub[1][i] << ",";
-			outputUB_c << endl;
-		}
-		outputUB_c.close();
+		// ofstream outputUB_c ("ub_c.csv", ios::out | ios::app);
+		// if ( outputUB_c.is_open() )
+		// {
+		// 	for (int i = 0; i < ub[1].getSize() - 1; ++i)
+		// 		outputUB_c << ub[1][i] << ",";
+		// 	outputUB_c << endl;
+		// }
+		// outputUB_c.close();
 
-		ofstream outputUB_r ("ub_r.csv", ios::out | ios::app);
-		if ( outputUB_r.is_open() )
-		{
-			for (int i = 0; i < ub[2].getSize() - 1; ++i)
-				outputUB_r << ub[2][i] << ",";
-			outputUB_r << endl;
-		}
-		outputUB_r.close();
+		// ofstream outputUB_r ("ub_r.csv", ios::out | ios::app);
+		// if ( outputUB_r.is_open() )
+		// {
+		// 	for (int i = 0; i < ub[2].getSize() - 1; ++i)
+		// 		outputUB_r << ub[2][i] << ",";
+		// 	outputUB_r << endl;
+		// }
+		// outputUB_r.close();
 		
-		ofstream summary ("summary.csv", ios::out | ios::app);
-		if ( summary.is_open() )
-		{
-			summary << cut.B << "," 
-				<< cut.SB << ","
-				<< cut.LG * cut.LEVEL << ","
-				<< cut.LG * (!cut.LEVEL) << ","
-				<< cut.I << ",,"
-				<< numBranch << ","
-				<< fData.breakstage << ","
-				<< initSampleSize << ","
-				<< numSelect << ","
-				<< bouncing << ","
-				<< iteration << ","
-				<< lb[iteration] << ","
-				<< ub[0][iteration] << ","
-				<< ub[2][iteration] << ","
-				<< sddp_gap * 100 << ","
-				<< runtime << ","
-				<< cputime << ","
-				<< LARGE_SAMPLE << ","
-				<< simulation_time << ","
-				<< ub[3][iteration+1] << ","
-				<< ub[4][iteration+1] << ","
-				<< ub[5][iteration+1] << ","
-				<< ub[1][iteration+1] << ","
-				<< ub[0][iteration+1] << ","
-				<< ub[2][iteration+1] << ","
-				<< simulation_gap * 100 << endl;		
-		}
-		summary.close();
+		// ofstream summary ("summary.csv", ios::out | ios::app);
+		// if ( summary.is_open() )
+		// {
+		// 	summary << cut.B << "," 
+		// 		<< cut.SB << ","
+		// 		<< cut.LG * cut.LEVEL << ","
+		// 		<< cut.LG * (!cut.LEVEL) << ","
+		// 		<< cut.I << ",,"
+		// 		<< numBranch << ","
+		// 		<< fData.breakstage << ","
+		// 		<< initSampleSize << ","
+		// 		<< numSelect << ","
+		// 		<< bouncing << ","
+		// 		<< iteration << ","
+		// 		<< lb[iteration] << ","
+		// 		<< ub[0][iteration] << ","
+		// 		<< ub[2][iteration] << ","
+		// 		<< sddp_gap * 100 << ","
+		// 		<< runtime << ","
+		// 		<< cputime << ","
+		// 		<< LARGE_SAMPLE << ","
+		// 		<< simulation_time << ","
+		// 		<< ub[3][iteration+1] << ","
+		// 		<< ub[4][iteration+1] << ","
+		// 		<< ub[5][iteration+1] << ","
+		// 		<< ub[1][iteration+1] << ","
+		// 		<< ub[0][iteration+1] << ","
+		// 		<< ub[2][iteration+1] << ","
+		// 		<< simulation_gap * 100 << endl;		
+		// }
+		// summary.close();
 		
 		// free memory
 		delete [] models;

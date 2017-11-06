@@ -43,126 +43,126 @@ void readData (FormatData * fData_p)
 	cout << "Start reading data from files... " << endl;
 
 	//! read number of stages
-	readArray<IloInt> (fData_p->numStage, "data/numStage.dat");
+	readArray<IloInt> (fData_p->numStage, "../data/numStage.dat");
 	IloInt numStage = fData_p->numStage;
 
-	readArray<IloInt> (fData_p->breakstage, "data/breakstage.dat");
+	readArray<IloInt> (fData_p->breakstage, "../data/breakstage.dat");
 
 	fData_p->initState = IloNumArray(*env);
-	readArray<IloNumArray> (fData_p->initState, "data/initState.dat");
+	readArray<IloNumArray> (fData_p->initState, "../data/initState.dat");
 	fData_p->initStateBin = IloNumArray(*env);
-	readArray<IloNumArray> (fData_p->initStateBin, "data/initStateBin.dat");
+	readArray<IloNumArray> (fData_p->initStateBin, "../data/initStateBin.dat");
 
-	readArray<IloInt> (fData_p->numFWsample, "data/numFWsample.dat");
+	readArray<IloInt> (fData_p->numFWsample, "../data/numFWsample.dat");
 	
 	fData_p->numScen = IloIntArray(*env);
-	readArray<IloIntArray> (fData_p->numScen, "data/numScen.dat");
+	readArray<IloIntArray> (fData_p->numScen, "../data/numScen.dat");
 	
 	fData_p->totalScen = fData_p->numScen[0];
 	for (int t = 1; t < numStage; ++t)
 		fData_p->totalScen *= fData_p->numScen[t];
 
-	readArray<IloInt> (fData_p->intX, "data/intX.dat");
+	readArray<IloInt> (fData_p->intX, "../data/intX.dat");
 
 	fData_p->xBound = IloNumArray2(*env);
-	readArray<IloNumArray2> (fData_p->xBound, "data/xBound.dat");
+	readArray<IloNumArray2> (fData_p->xBound, "../data/xBound.dat");
 
 	fData_p->thetaBound = IloNumArray2(*env);
-	readArray<IloNumArray2> (fData_p->thetaBound, "data/thetaBound.dat");
+	readArray<IloNumArray2> (fData_p->thetaBound, "../data/thetaBound.dat");
 
 	fData_p->T = IloNumArray2(*env);
-	readArray<IloNumArray2> (fData_p->T, "data/T.dat");
+	readArray<IloNumArray2> (fData_p->T, "../data/T.dat");
 
 	fData_p->TT = IloNumArray2(*env);
-	readArray<IloNumArray2> (fData_p->TT, "data/TT.dat");
+	readArray<IloNumArray2> (fData_p->TT, "../data/TT.dat");
 
 	cout << "Basic SDDIP data read." << endl;
 	
 	//! read objective coefficients for x (original) variables 
 	fData_p->x = IloNumArray2(*env);
-	readArray<IloNumArray2> (fData_p->x, "data/x.dat");
+	readArray<IloNumArray2> (fData_p->x, "../data/x.dat");
 
 	fData_p->xBin = IloNumArray2(*env);
-	readArray<IloNumArray2> (fData_p->xBin, "data/xBin.dat");
+	readArray<IloNumArray2> (fData_p->xBin, "../data/xBin.dat");
 
 	fData_p->y1 = IloNumArray2(*env);
-	readArray<IloNumArray2> (fData_p->y1, "data/y1.dat");
+	readArray<IloNumArray2> (fData_p->y1, "../data/y1.dat");
 
 	fData_p->y2 = IloNumArray2(*env);
-	readArray<IloNumArray2> (fData_p->y2, "data/y2.dat");
+	readArray<IloNumArray2> (fData_p->y2, "../data/y2.dat");
 
 	//! read matrices in constraint A_tx_t + W1_ty1_t + W2_ty2_t + B_tz_t >= b_t
 	fData_p->A = IloNumArray2(*env);
-	readArray<IloNumArray2> (fData_p->A, "data/A.dat");
+	readArray<IloNumArray2> (fData_p->A, "../data/A.dat");
 
 	fData_p->ABin = IloNumArray2(*env);
-	readArray<IloNumArray2> (fData_p->ABin, "data/ABin.dat");
+	readArray<IloNumArray2> (fData_p->ABin, "../data/ABin.dat");
 
 	fData_p->B = IloNumArray2(*env);
-	readArray<IloNumArray2> (fData_p->B, "data/B.dat");
+	readArray<IloNumArray2> (fData_p->B, "../data/B.dat");
 
 	fData_p->BBin = IloNumArray2(*env);
-	readArray<IloNumArray2> (fData_p->BBin, "data/BBin.dat");
+	readArray<IloNumArray2> (fData_p->BBin, "../data/BBin.dat");
 
 	fData_p->W1 = IloNumArray2(*env);
-	readArray<IloNumArray2> (fData_p->W1, "data/W1.dat");
+	readArray<IloNumArray2> (fData_p->W1, "../data/W1.dat");
 
 	fData_p->W2 = IloNumArray2(*env);
-	readArray<IloNumArray2> (fData_p->W2, "data/W2.dat");
+	readArray<IloNumArray2> (fData_p->W2, "../data/W2.dat");
 	
 	fData_p->b = IloNumArray2(*env);
-	readArray<IloNumArray2> (fData_p->b, "data/rhs.dat");
+	readArray<IloNumArray2> (fData_p->b, "../data/rhs.dat");
 
 	cout << "Initialization data read." << endl;
 
 	fData_p->uncertaintySource = IloIntArray(*env);
-	readArray<IloIntArray> (fData_p->uncertaintySource, "data/uncertaintySource.dat");
+	readArray<IloIntArray> (fData_p->uncertaintySource, "../data/uncertaintySource.dat");
 
 	if ( fData_p->uncertaintySource[0] )
 	{
 		fData_p->scen.x = IloNumArray3(*env);
 		fData_p->scen.xBin = IloNumArray3(*env);
-		readArray<IloNumArray3> (fData_p->scen.x, "data/scenX.dat");
-		readArray<IloNumArray3> (fData_p->scen.xBin, "data/scenXBin.dat");
+		readArray<IloNumArray3> (fData_p->scen.x, "../data/scenX.dat");
+		readArray<IloNumArray3> (fData_p->scen.xBin, "../data/scenXBin.dat");
 	}
 	if ( fData_p->uncertaintySource[1] )
 	{
 		fData_p->scen.y1 = IloNumArray3(*env);
-		readArray<IloNumArray3> (fData_p->scen.y1, "data/scenY1.dat");
+		readArray<IloNumArray3> (fData_p->scen.y1, "../data/scenY1.dat");
 	}
 	if ( fData_p->uncertaintySource[2] )
 	{
 		fData_p->scen.y2 = IloNumArray3(*env);
-		readArray<IloNumArray3> (fData_p->scen.y2, "data/scenY2.dat");
+		readArray<IloNumArray3> (fData_p->scen.y2, "../data/scenY2.dat");
 	}
 	if ( fData_p->uncertaintySource[3] )
 	{
 		fData_p->scen.A = IloNumArray4(*env);
 		fData_p->scen.ABin = IloNumArray4(*env);
-		readArray<IloNumArray4> (fData_p->scen.A, "data/scenA.dat");
-		readArray<IloNumArray4> (fData_p->scen.ABin, "data/scenABin.dat");
+		readArray<IloNumArray4> (fData_p->scen.A, "../data/scenA.dat");
+		readArray<IloNumArray4> (fData_p->scen.ABin, "../data/scenABin.dat");
 	}
 	if ( fData_p->uncertaintySource[4] )
 	{
 		fData_p->scen.B = IloNumArray4(*env);
 		fData_p->scen.BBin = IloNumArray4(*env);
-		readArray<IloNumArray4> (fData_p->scen.B, "data/scenB.dat");
-		readArray<IloNumArray4> (fData_p->scen.BBin, "data/scenBBin.dat");
+		readArray<IloNumArray4> (fData_p->scen.B, "../data/scenB.dat");
+		readArray<IloNumArray4> (fData_p->scen.BBin, "../data/scenBBin.dat");
 	}
 	if ( fData_p->uncertaintySource[5] )
 	{
 		fData_p->scen.W1 = IloNumArray4(*env);
-		readArray<IloNumArray4> (fData_p->scen.W1, "data/scenW1.dat");
+		readArray<IloNumArray4> (fData_p->scen.W1, "../data/scenW1.dat");
 	}
 	if ( fData_p->uncertaintySource[6] )
 	{
 		fData_p->scen.W2 = IloNumArray4(*env);
-		readArray<IloNumArray4> (fData_p->scen.W2, "data/scenW2.dat");
+		readArray<IloNumArray4> (fData_p->scen.W2, "../data/scenW2.dat");
 	}
 	if ( fData_p->uncertaintySource[7] )
 	{
 		fData_p->scen.b = IloNumArray3(*env);
-		readArray<IloNumArray3> (fData_p->scen.b, "data/scenRHS.dat");
+		readArray<IloNumArray3> (fData_p->scen.b, "../data/scenRHS.dat");
 	}
 
 	return;
@@ -214,8 +214,8 @@ void buildModel (Model * models, FormatData * fData_p)
 			construct state variables (x), local integer variables (y1),
 			and local copy of state variables (z).
 
-			Breakstage dictates the state space change.
-			0 <= breakstage <= T:
+			Breakstage dictates the state space change. Range of breakstage: [0, T].
+			Once breakstage is chosen:
 				a. t < breakstage: stage problem t uses binary state variables
 				b. t >= breakstage: stage problem t uses mixed integer state variables
 			breakstage = 0, all stage problems use original state variables
@@ -257,8 +257,12 @@ void buildModel (Model * models, FormatData * fData_p)
 		}
 
 		//! construct local variables
-		models[t].y1 = IloNumVarArray(newEnv, dimY1, fData_p->y1Bound[0], fData_p->y1Bound[1], ILOINT);
-		models[t].y2 = IloNumVarArray(newEnv, dimY2, fData_p->y2Bound[0], fData_p->y2Bound[1], ILOFLOAT);
+		models[t].y1 = IloNumVarArray(newEnv, dimY1, 0, IloInfinity, ILOINT);
+		models[t].y2 = IloNumVarArray(newEnv, dimY2, 0, IloInfinity, ILOFLOAT);
+		// TODO: include variable bounds when creating problems.
+		// models[t].y1 = IloNumVarArray(newEnv, dimY1, fData_p->y1Bound[0], fData_p->y1Bound[1], ILOINT);
+		// models[t].y2 = IloNumVarArray(newEnv, dimY2, fData_p->y2Bound[0], fData_p->y2Bound[1], ILOFLOAT);
+
 		//! construct theta variables
 		models[t].theta = IloNumVar(newEnv, fData_p->thetaBound[0][t], fData_p->thetaBound[1][t]);
 
@@ -747,6 +751,9 @@ void backward (Model * models, FormatData * fData_p, int start, int end,
 
 			// Start parallelization
 			int nProcessors = omp_get_max_threads();
+
+			// set the number of threads
+			// omp_set_num_threads(nProcessors)
 			omp_set_num_threads(1);
 
 			#pragma omp parallel
@@ -1516,8 +1523,6 @@ void usage (char *progname)
 	cerr << "      1 -- use Level method." << endl;
 	cerr << "arg5: 0 -- turn off Integer L-shaped cuts;" << endl;
 	cerr << "      1 -- turn on Integer L-shaped cuts." << endl;
-	cerr << "arg6: 0 -- sampling is not performed in forward step;" << endl;
-	cerr << "      1 -- sampling is performed in forward step." << endl;
-	cerr << "arg7: [optional] used as the seed of the random number generator." << endl;
+	cerr << "arg6: [optional] used as the seed of the random number generator." << endl;
 	cerr << "      If not provided, system will generate one automatically." << endl;
 } // END usage

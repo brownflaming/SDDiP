@@ -3,8 +3,8 @@ LIBFORMAT  = static_pic
 
 HOSTNAME := $(shell hostname)
 
-ifeq ("$(HOSTNAME)","phdstulin2.isye.gatech.edu")
-	HPCOPTPATH    = /hpcopt
+ifeq ("$(HOSTNAME)","isye-aux1.isye.gatech.edu")
+	HPCOPTPATH    = /opt
 	IBMPATH       = ibm
 	CPLEX_VERSION = CPLEX_Studio126
 endif
@@ -12,13 +12,6 @@ endif
 ifeq ("$(HOSTNAME)","brownflaming-VirtualBox")
 	HPCOPTPATH    = /opt
 	IBMPATH       = ibm
-	CPLEX_VERSION = CPLEX_Studio1263
-endif
-
-ifeq ("$(HOSTNAME)","Jikais-MacBook-Pro.local")
-	SYSTEM = x86-64_osx
-	HPCOPTPATH    = /Users/brownflaming/Applications
-	IBMPATH       = IBM
 	CPLEX_VERSION = CPLEX_Studio1263
 endif
 
@@ -33,31 +26,19 @@ endif
 # --------------------------------------------------------------------
 # Compiler selection and option
 # --------------------------------------------------------------------
-
-ifeq ("$(HOSTNAME)","Jikais-MacBook-Pro.local")
-	CCC = clang++ -O0
-	CCOPT = -m64 -O -fPIC -fexceptions -DNDEBUG -DIL_STD -stdlib=libstdc++
-else
-	CCC = g++ -std=c++0x
-	CCOPT = -m64 -O2 -fPIC -fno-strict-aliasing -fexceptions -DNDEBUG -DIL_STD
-endif
+CCC = g++ -std=c++0x
+CCOPT = -m64 -O2 -fPIC -fno-strict-aliasing -fexceptions -DNDEBUG -DIL_STD
 
 # -------------------------------------------------------------------
 # Link options and libraries
 # -------------------------------------------------------------------
-
 CPLEXBINDIR   = $(CPLEXDIR)/bin/$(BINDIST)
 CPLEXLIBDIR   = $(CPLEXDIR)/lib/$(SYSTEM)/$(LIBFORMAT)
 CONCERTLIBDIR = $(CONCERTDIR)/lib/$(SYSTEM)/$(LIBFORMAT)
 
 CCLNDIRS  = -L$(CPLEXLIBDIR) -L$(CONCERTLIBDIR)
 
-ifeq ("$(HOSTNAME)","Jikais-MacBook-Pro.local")
-	CCLNFLAGS = -lconcert -lilocplex -lcplex -m64 -lm -lpthread -framework CoreFoundation -framework IOKit -stdlib=libstdc++
-else
-	CCLNFLAGS = -lilocplex -lcplex -lconcert -lm -pthread -g -fopenmp
-endif
-#-g -fopenmp
+CCLNFLAGS = -lilocplex -lcplex -lconcert -lm -pthread -g -fopenmp
 
 CONCERTINCDIR = $(CONCERTDIR)/include
 CPLEXINCDIR   = $(CPLEXDIR)/include
@@ -66,7 +47,7 @@ CCFLAGS = $(CCOPT) -I$(CPLEXINCDIR) -I$(CONCERTINCDIR) -g -O0 -fopenmp
 #-g -O0 -fopenmp
 
 OBJ_DIR = obj
-OUT_RELEASE = bin/msuc
+OUT_RELEASE = bin/sddip
 
 OBJ_FILE = $(OBJ_DIR)/mt64.o $(OBJ_DIR)/functions.o $(OBJ_DIR)/sddip.o
 
