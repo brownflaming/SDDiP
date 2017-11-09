@@ -407,8 +407,7 @@ void buildModel (Model * models, FormatData * fData_p)
 
 void getSamplePaths (SamplePath & sample, FormatData * fData_p)
 {
-	// cout << "Sampling forward paths from scenarios..." << endl;
-	
+	cout << "Sampling forward paths from scenarios..." << endl;
 	sample.clear();
 	IloEnv * env = &(fData_p->dataEnv);
 
@@ -518,7 +517,7 @@ void forward (Model * models, FormatData * fData_p, int start, int end,
 	to accommodate the "bouncing" technique.
 */
 {
-	// cout << "Start the forward process..." << endl;
+	cout << "Start the forward process..." << endl;
 
 	int p, t, i;
 	IloInt nconstr1 = models[0].constr1.getSize();
@@ -706,7 +705,7 @@ void getLargestK(IloNumArray arr, int k, IloIntArray & idx)
 void backward (Model * models, FormatData * fData_p, int start, int end, 
 	const IloNumArray3 fwdSoln, IloNumArray & lb, const CutSwitch cut)
 {
-	// cout << "Start the backward process...." << endl;
+	cout << "Start the backward process...." << endl;
 
 	int t, k, j;
 	IloNumArray2 x, xBin, y1, y2, b;
@@ -753,8 +752,8 @@ void backward (Model * models, FormatData * fData_p, int start, int end,
 			int nProcessors = omp_get_max_threads();
 
 			// set the number of threads
-			// omp_set_num_threads(nProcessors)
-			omp_set_num_threads(1);
+			omp_set_num_threads(nProcessors);
+			// omp_set_num_threads(1);
 
 			#pragma omp parallel
 			{

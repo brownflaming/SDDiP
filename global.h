@@ -225,13 +225,10 @@ struct SamplePath
 	void clear()
 	{
 		x.clear();
-		xBin.clear();
 		y1.clear();
 		y2.clear();
 		A.clear();
-		ABin.clear();
 		B.clear();
-		BBin.clear();
 		W1.clear();
 		W2.clear();
 		b.clear();
@@ -241,13 +238,10 @@ struct SamplePath
 	void end()
 	{
 		x.end();
-		xBin.end();
 		y1.end();
 		y2.end();
 		A.end();
-		ABin.end();
 		B.end();
-		BBin.end();
 		W1.end();
 		W2.end();
 		b.end();

@@ -102,7 +102,7 @@ int main (int argc, char *argv[])
 		int iteration = 0; // iteration counter
 
 		// forward step configuration
-		fData.numFWsample = 3; // number of forwad sample paths
+		// fData.numFWsample = 3; // number of forwad sample paths
 		int numSelect = 1; // number of fwdSoln chosen from all candidates
 		int initSampleSize = fData.numFWsample;
 		int numBranch = fData.numScen[1];
